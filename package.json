@@ -1,0 +1,18 @@
+{
+	"name": "Bearer Authentication",
+	"description": "Custom authentication plugin for Hapi using Bearer tokens",
+	"version": "0.1.0",
+	"author": "Adri Van Houdt <adri@salesflare.com>",
+	"private": true,
+	"main": "index.js",
+	"dependencies": {
+		"boom": "^2.6.0",
+		"hoek": "^2.9.0"
+	},
+	"peerDependencies": {
+		"hapi": ">=7.x.x < 8.x.x"
+	},
+	"engines": {
+		"node": ">=0.10.33"
+	}
+}
