@@ -1,0 +1,6 @@
+{
+    "node": true,
+    "validthis": true,
+    "eqeqeq": true,
+    "unused": true
+}

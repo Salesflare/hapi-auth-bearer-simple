@@ -1,10 +1,14 @@
 {
-	"name": "Bearer Authentication",
+	"name": "hapi-auth-bearer",
 	"description": "Custom authentication plugin for Hapi using Bearer tokens",
 	"version": "0.1.0",
 	"author": "Adri Van Houdt <adri@salesflare.com>",
 	"private": true,
 	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Salesflare/hapi-auth-bearer-plugin"
+	},
 	"dependencies": {
 		"boom": "^2.6.0",
 		"hoek": "^2.9.0"
@@ -14,5 +18,10 @@
 	},
 	"engines": {
 		"node": ">=0.10.33"
-	}
+	},
+	"bugs": {
+		"url": "https://github.com/Salesflare/hapi-auth-bearer-plugin/issues"
+	},
+	"homepage": "https://github.com/Salesflare/hapi-auth-bearer-plugin",
+	"license": "MIT"
 }

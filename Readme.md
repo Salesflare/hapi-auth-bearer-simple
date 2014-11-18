@@ -17,7 +17,7 @@ var server = Hapi.createServer('localhost', 8000, {
 });
 
 server.pack.register({
-    plugin: require('bearerAuth'),
+    plugin: require('hapi-auth-beaer'),
     options: options
 }, function (err) {
 
