@@ -2,8 +2,9 @@
 
 [**hapi**](https://github.com/hapijs/hapi) Bearer Token Authentication Scheme
 
-If you have any problems and/or questions make a new issue.
-If you want to contribute feel free to fork and add a pull request or again make an issue.
+If you have any problems and/or questions make a new [**issue**](https://github.com/Salesflare/hapi-auth-bearer-plugin/issues).
+
+If you want to contribute feel free to fork and add a pull request or again make an [**issue**](https://github.com/Salesflare/hapi-auth-bearer-plugin/issues).
 
 The plugin requires validating a token passed in by the bearer authorization header. The validation function is something you have to provide to the plugin.
 
