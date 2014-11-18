@@ -18,7 +18,7 @@ var server = Hapi.createServer('localhost', 8000, {
 });
 
 server.pack.register({
-    plugin: require('hapi-auth-beaer'),
+    plugin: require('hapi-auth-bearer'),
     options: options
 }, function (err) {
 
@@ -31,10 +31,12 @@ server.pack.register({
         method: 'GET', 
         path: '/', 
         handler: function (request, reply) {
-            reply('success');
+            reply({
+                success: true
+            });
         }, 
         config: { 
-            auth: 'simple' 
+            auth: 'basic' 
         } 
     });
 
