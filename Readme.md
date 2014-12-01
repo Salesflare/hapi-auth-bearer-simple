@@ -13,14 +13,10 @@ Example:
 ```javascript
 var Hapi = require('hapi');
 
-var server = Hapi.createServer('localhost', 8000, {
-    cors: true
-});
+var server = new Hapi.Server(localhost', 8000);
 
-server.pack.register({
-    plugin: require('hapi-auth-bearer-simple'),
-    options: options
-}, function (err) {
+
+server.pack.register(require('hapi-auth-bearer-simple'), function (err) {
 
     server.auth.strategy('basic', 'bearerAuth', {
         validateFunction: validateFunction
@@ -60,4 +56,4 @@ var validateFunction = function(token, callback ) {
     - `callback` - a callback function with the signature `function(err, isValid, credentials)` where:
         - `err` - any error.
         - `isValid` - `true` if both the username was found and the password matched, otherwise `false`.
-        - `credentials` - an object passed back to the plugin and which will become available in the `request`object as `request.auth.credentials`. Normally credentials are only included when `isValid`is `true`. This object can be only the token as in the example but can also be the user ascassociated with the token
+        - `credentials` - an object passed back to the plugin and which will become available in the `request`object as `request.auth.credentials`. Normally credentials are only included when `isValid`is `true`. This object can be only the token as in the example but is preferably all the info you need from the authenticated user
