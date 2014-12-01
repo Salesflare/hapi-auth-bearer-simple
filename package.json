@@ -14,11 +14,19 @@
     "boom": "^2.6.0",
     "hoek": "^2.10.0"
   },
+  "devDependencies": {
+    "lab": "^5.1.0",
+    "code": "^1.2.1",
+    "hapi": "^8.0.0"
+  },
   "peerDependencies": {
     "hapi": ">=8.x.x < 9.x.x"
   },
   "engines": {
     "node": ">=0.10.33"
+  },
+  "scripts": {
+    "test": "mingw32-make test-cov"
   },
   "bugs": {
     "url": "https://github.com/Salesflare/hapi-auth-bearer-plugin/issues"
