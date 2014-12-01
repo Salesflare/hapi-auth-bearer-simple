@@ -13,27 +13,28 @@ Example:
 ```javascript
 var Hapi = require('hapi');
 
-var server = new Hapi.Server(localhost', 8000);
+var server = new Hapi.Server('localhost', 8000);
 
 
 server.pack.register(require('hapi-auth-bearer-simple'), function (err) {
+    if (err) throw err;
 
     server.auth.strategy('basic', 'bearerAuth', {
         validateFunction: validateFunction
     });
 
     // Add a standard route here as example
-    server.route({ 
-        method: 'GET', 
-        path: '/', 
+    server.route({
+        method: 'GET',
+        path: '/',
         handler: function (request, reply) {
             reply({
                 success: true
             });
-        }, 
-        config: { 
-            auth: 'basic' 
-        } 
+        },
+        config: {
+            auth: 'basic'
+        }
     });
 
     server.start(function () {
@@ -41,12 +42,16 @@ server.pack.register(require('hapi-auth-bearer-simple'), function (err) {
     });
 });
 
-var validateFunction = function(token, callback ) {
+var validateFunction = function (token, callback) {
     // Use a real strategy here to check if the token is valid
-    if(token === "123456789"){
-        callback(null, true, { token: token })
+    if (token === "123456789") {
+        callback(null, true, {
+            token: token
+        });
     } else {
-        callback(null, false, { token: token })
+        callback(null, false, {
+            token: token
+        });
     }
 };
 ```
