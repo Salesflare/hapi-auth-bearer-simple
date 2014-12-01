@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple.svg?branch=master)](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple)
 # Hapi authentication plugin
 
 [**hapi**](https://github.com/hapijs/hapi) Bearer Token Authentication Scheme
