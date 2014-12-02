@@ -20,7 +20,7 @@
     "hapi": "^8.0.0"
   },
   "peerDependencies": {
-    "hapi": ">=8.x.x < 9.x.x"
+    "hapi": ">=8.x.x"
   },
   "engines": {
     "node": ">=0.10.33"
