@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple.svg?branch=master)](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple)
+![Build Status](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple.svg?branch=master)  ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple.svg) ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple/dev-status.svg) ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple/peer-status.svg)
+
 # Hapi authentication plugin
 
 [**hapi**](https://github.com/hapijs/hapi) Bearer Token Authentication Scheme
