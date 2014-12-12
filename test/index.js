@@ -25,7 +25,6 @@ lab.experiment('Integration', function () {
             }
          });
 
-
          server.route({
             method: 'GET',
             path: '/login/{user}',
@@ -49,7 +48,6 @@ lab.experiment('Integration', function () {
                email: 'test@test.com',
                token: 'abc'
             });
-
 
             done();
          });
