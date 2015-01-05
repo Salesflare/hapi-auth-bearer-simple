@@ -65,3 +65,5 @@ var validateFunction = function (token, callback) {
         - `err` - any error.
         - `isValid` - `true` if both the username was found and the password matched, otherwise `false`.
         - `credentials` - an object passed back to the plugin and which will become available in the `request`object as `request.auth.credentials`. Normally credentials are only included when `isValid`is `true`. This object can be only the token as in the example but is preferably all the info you need from the authenticated user
+
+You can chain strategies when you give no `error` and `isValid = true` but leave the `credentials` empty
