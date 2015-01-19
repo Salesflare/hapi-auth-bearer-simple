@@ -59,11 +59,12 @@ var validateFunction = function (token, callback) {
 };
 ```
 
-- `validateFunc` - (required) a token lookup and validation function with the signature `function(token, callback)`
+- `validateFunc` - (required) a token lookup and validation function with the signature `function (token, callback)`
     - `token` - the auth token received from the client.
-    - `callback` - a callback function with the signature `function(err, isValid, credentials)` where:
+    - `callback` - a callback function with the signature `function (err, isValid, credentials)` where:
         - `err` - any error.
         - `isValid` - `true` if both the username was found and the password matched, otherwise `false`.
         - `credentials` - an object passed back to the plugin and which will become available in the `request`object as `request.auth.credentials`. Normally credentials are only included when `isValid`is `true`. This object can be only the token as in the example but is preferably all the info you need from the authenticated user
+- `exposeRequest` - (optional / advanced) If set to `true` the `validateFunction`'s signature will be `function (token, request, callback)`. This can be usefull if you have plugins that expose certain functions/object to the `request` object and you want to use them in your `validateFunction`. Be aware that modifying the object is not recommended because this is the same object that you will use in the whole lifecycle. Also exposing functions/object to the `resuest` object during the validation is not recommended. Follow the `Hapi` standards whenever you can!
 
 You can chain strategies when you give no `error` and `isValid = true` but leave the `credentials` empty
