@@ -53,7 +53,7 @@ lab.experiment('Integration', function () {
       });
    });
    
-   it('exposes the resuest object', function (done) {
+   it('exposes the request object', function (done) {
       var server = new Hapi.Server();
       server.connection();
 
