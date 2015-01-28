@@ -20,13 +20,13 @@
     "url": "https://github.com/Salesflare/hapi-auth-bearer-plugin"
   },
   "dependencies": {
-    "boom": "^2.6.0",
-    "hoek": "^2.10.0"
+    "boom": "2.x.x",
+    "hoek": "2.x.x"
   },
   "devDependencies": {
-    "lab": "^5.1.0",
-    "code": "^1.2.1",
-    "hapi": "^8.0.0"
+    "lab": "5.x.x",
+    "code": "1.x.x",
+    "hapi": "8.x.x"
   },
   "peerDependencies": {
     "hapi": ">=8.x.x"
@@ -35,7 +35,7 @@
     "node": ">=0.10.33"
   },
   "scripts": {
-    "test": "make test"
+    "test": "make test-cov"
   },
   "bugs": {
     "url": "https://github.com/Salesflare/hapi-auth-bearer-plugin/issues"
