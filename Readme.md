@@ -5,10 +5,10 @@
 
 > [**hapi**](https://github.com/hapijs/hapi) Bearer Token Authentication Scheme
 
-##What
+## What
 The plugin requires validating a token passed in by the bearer authorization header. The validation function is something you have to provide to the plugin.
 
-##How
+## How
 
 ```javascript
 server.register(require('hapi-auth-bearer-simple'), function (err) {
