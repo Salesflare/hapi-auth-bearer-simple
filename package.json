@@ -35,7 +35,7 @@
     "node": ">=0.10.33"
   },
   "scripts": {
-    "test": "make test-cov"
+    "test": "lab -a code -vL -t 100"
   },
   "bugs": {
     "url": "https://github.com/Salesflare/hapi-auth-bearer-plugin/issues"
