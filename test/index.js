@@ -39,7 +39,7 @@ lab.experiment('Integration', function () {
 
 			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply(request.auth.credentials);}}});
+			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply(request.auth.credentials); }}});
 
 			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
@@ -74,7 +74,7 @@ lab.experiment('Integration', function () {
 				exposeRequest: true
 			});
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply(request.auth.credentials);}}});
+			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply(request.auth.credentials); }}});
 
 			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
@@ -103,7 +103,7 @@ lab.experiment('Integration', function () {
 
 			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok'); }}});
 
 			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
@@ -133,7 +133,7 @@ lab.experiment('Integration', function () {
 
 			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok'); }}});
 
 			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
@@ -163,7 +163,7 @@ lab.experiment('Integration', function () {
 
 			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok'); }}});
 
 			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
@@ -193,7 +193,7 @@ lab.experiment('Integration', function () {
 
 			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok'); }}});
 
 			var request = {method: 'GET',	url: '/login/testuser'};
 
@@ -223,7 +223,7 @@ lab.experiment('Integration', function () {
 
 			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok'); }}});
 
 			var request = {method: 'GET',	url: '/login/testuser', headers: { Authorization: undefined }};
 
@@ -253,7 +253,7 @@ lab.experiment('Integration', function () {
 
 			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok'); }}});
 
 			var request = {method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader }};
 
