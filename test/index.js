@@ -9,261 +9,360 @@ var it = lab.it;
 var expect = Code.expect;
 
 var internals = {
-	validCredentials: {
-		email: 'test@test.com',
-		token: 'abc'
-	},
-	validUser: {
-		email: 'test@test.com'
-	},
-	token: 'abc',
-	authorizationHeader: 'Bearer abc',
-	invalidAuhtorizationHeader: 'NotBearer abc'
+    validCredentials: {
+        email: 'test@test.com',
+        token: 'abc'
+    },
+    validUser: {
+        email: 'test@test.com'
+    },
+    token: 'abc',
+    authorizationHeader: 'Bearer abc',
+    invalidAuhtorizationHeader: 'NotBearer abc'
 };
 
 
 lab.experiment('Integration', function () {
-	it('authenticates a request', function (done) {
 
-		var validFunc = function (token, callback) {
-			expect(token).to.exist();
+    it('authenticates a request', function (done) {
 
-			return callback(null, token === internals.token, internals.validUser);
-		};
+        var validFunc = function (token, callback) {
 
-		var server = new Hapi.Server();
-		server.connection();
+            expect(token).to.exist();
 
-		server.register(require('../'), function (err) {
-			expect(err).to.not.exist();
+            return callback(null, token === internals.token, internals.validUser);
+        };
 
-			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+        var server = new Hapi.Server();
+        server.connection();
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply(request.auth.credentials);}}});
+        server.register(require('../'), function (err) {
 
-			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+            expect(err).to.not.exist();
 
-			server.inject(request, function (res) {
-				expect(res.statusCode).to.equal(200);
-				expect(res.result).to.exist();
-				expect(res.result).to.deep.equal(internals.validCredentials);
-				done();
-			});
-		});
-	});
+            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-	it('exposes the request object', function (done) {
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: 'default',
+                    handler: function (request, reply) {
 
-		var validFunc = function (token, request, callback) {
-			expect(token).to.exist();
-			expect(request).to.exist();
-			expect(request).to.be.an.object();
-			expect(request.path).to.equal('/login/testuser');
+                        return reply(request.auth.credentials);
+                    }
+                }
+            });
 
-			return callback(null, token === internals.token, internals.validUser);
-		};
+            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
-		var server = new Hapi.Server();
-		server.connection();
+            server.inject(request, function (res) {
 
-		server.register(require('../'), function (err) {
-			expect(err).to.not.exist();
+                expect(res.statusCode).to.equal(200);
+                expect(res.result).to.exist();
+                expect(res.result).to.deep.equal(internals.validCredentials);
+                done();
+            });
+        });
+    });
 
-			server.auth.strategy('default', 'bearerAuth', true, {
-				validateFunction: validFunc,
-				exposeRequest: true
-			});
+    it('exposes the request object', function (done) {
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply(request.auth.credentials);}}});
+        var validFunc = function (token, request, callback) {
 
-			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+            expect(token).to.exist();
+            expect(request).to.exist();
+            expect(request).to.be.an.object();
+            expect(request.path).to.equal('/login/testuser');
 
-			server.inject(request, function (res) {
-				expect(res.statusCode).to.equal(200);
-				expect(res.result).to.exist();
-				expect(res.result).to.deep.equal(internals.validCredentials);
-				done();
-			});
-		});
-	});
+            return callback(null, token === internals.token, internals.validUser);
+        };
 
-	it('Returns unAuthorized error if validFunction throws error', function (done) {
+        var server = new Hapi.Server();
+        server.connection();
 
-		var validFunc = function (token, callback) {
-			expect(token).to.exist();
+        server.register(require('../'), function (err) {
 
-			return callback('401', false, null);
-		};
+            expect(err).to.not.exist();
 
-		var server = new Hapi.Server();
-		server.connection();
+            server.auth.strategy('default', 'bearerAuth', true, {
+                validateFunction: validFunc,
+                exposeRequest: true
+            });
 
-		server.register(require('../'), function (err) {
-			expect(err).to.not.exist();
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: 'default',
+                    handler: function (request, reply) {
 
-			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+                        return reply(request.auth.credentials);
+                    }
+                }
+            });
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
-			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+            server.inject(request, function (res) {
 
-			server.inject(request, function (res) {
+                expect(res.statusCode).to.equal(200);
+                expect(res.result).to.exist();
+                expect(res.result).to.deep.equal(internals.validCredentials);
+                done();
+            });
+        });
+    });
 
-				expect(res.result).to.exist();
-				expect(res.statusCode).to.equal(401);
+    it('Returns unAuthorized error if validFunction throws error', function (done) {
 
-				done();
-			});
-		});
-	});
+        var validFunc = function (token, callback) {
 
-	it('Returns unAuthorized error if validFunction determines token is not valid', function (done) {
+            expect(token).to.exist();
 
-		var validFunc = function (token, callback) {
-			expect(token).to.exist();
+            return callback('401', false, null);
+        };
 
-			return callback(null, token !== internals.token, null);
-		};
+        var server = new Hapi.Server();
+        server.connection();
 
-		var server = new Hapi.Server();
-		server.connection();
+        server.register(require('../'), function (err) {
 
-		server.register(require('../'), function (err) {
-			expect(err).to.not.exist();
+            expect(err).to.not.exist();
 
-			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: 'default',
+                    handler: function (request, reply) {
 
-			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+                        return reply('ok');
+                    }
+                }
+            });
 
-			server.inject(request, function (res) {
+            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
-				expect(res.result).to.exist();
-				expect(res.statusCode).to.equal(401);
+            server.inject(request, function (res) {
 
-				done();
-			});
-		});
-	});
+                expect(res.result).to.exist();
+                expect(res.statusCode).to.equal(401);
 
-	it('Returns unAuthorized error if validFunction does not return credentials', function (done) {
+                done();
+            });
+        });
+    });
 
-		var validFunc = function (token, callback) {
-			expect(token).to.exist();
+    it('Returns unAuthorized error if validFunction determines token is not valid', function (done) {
 
-			return callback(null, token === internals.token, null);
-		};
+        var validFunc = function (token, callback) {
 
-		var server = new Hapi.Server();
-		server.connection();
+            expect(token).to.exist();
 
-		server.register(require('../'), function (err) {
-			expect(err).to.not.exist();
+            return callback(null, token !== internals.token, null);
+        };
 
-			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+        var server = new Hapi.Server();
+        server.connection();
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+        server.register(require('../'), function (err) {
 
-			var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+            expect(err).to.not.exist();
 
-			server.inject(request, function (res) {
+            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-				expect(res.result).to.exist();
-				expect(res.statusCode).to.equal(401);
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: 'default',
+                    handler: function (request, reply) {
 
-				done();
-			});
-		});
-	});
+                        return reply('ok');
+                    }
+                }
+            });
 
-	it('Returns unAuthorized error if no authorization header', function (done) {
+            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
-		var validFunc = function (token, callback) {
-			expect(token).to.exist();
+            server.inject(request, function (res) {
 
-			return callback(null, token === internals.token, internals.validUser);
-		};
+                expect(res.result).to.exist();
+                expect(res.statusCode).to.equal(401);
 
-		var server = new Hapi.Server();
-		server.connection();
+                done();
+            });
+        });
+    });
 
-		server.register(require('../'), function (err) {
-			expect(err).to.not.exist();
+    it('Returns unAuthorized error if validFunction does not return credentials', function (done) {
 
-			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+        var validFunc = function (token, callback) {
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+            expect(token).to.exist();
 
-			var request = {method: 'GET',	url: '/login/testuser'};
+            return callback(null, token === internals.token, null);
+        };
 
-			server.inject(request, function (res) {
+        var server = new Hapi.Server();
+        server.connection();
 
-				expect(res.result).to.exist();
-				expect(res.statusCode).to.equal(401);
+        server.register(require('../'), function (err) {
 
-				done();
-			});
-		});
-	});
+            expect(err).to.not.exist();
 
-	it('Returns unAuthorized error if authorization header is undefined', function (done) {
+            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-		var validFunc = function (token, callback) {
-			expect(token).to.exist();
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: 'default',
+                    handler: function (request, reply) {
 
-			return callback(null, token === internals.token, internals.validUser);
-		};
+                        return reply('ok');
+                    }
+                }
+            });
 
-		var server = new Hapi.Server();
-		server.connection();
+            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
 
-		server.register(require('../'), function (err) {
-			expect(err).to.not.exist();
+            server.inject(request, function (res) {
 
-			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+                expect(res.result).to.exist();
+                expect(res.statusCode).to.equal(401);
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+                done();
+            });
+        });
+    });
 
-			var request = {method: 'GET',	url: '/login/testuser', headers: { Authorization: undefined }};
+    it('Returns unAuthorized error if no authorization header', function (done) {
 
-			server.inject(request, function (res) {
+        var validFunc = function (token, callback) {
 
-				expect(res.result).to.exist();
-				expect(res.statusCode).to.equal(401);
+            expect(token).to.exist();
 
-				done();
-			});
-		});
-	});
+            return callback(null, token === internals.token, internals.validUser);
+        };
 
-	it('Returns notAcceptable error if authorization header is not bearer', function (done) {
+        var server = new Hapi.Server();
+        server.connection();
 
-		var validFunc = function (token, callback) {
-			expect(token).to.exist();
+        server.register(require('../'), function (err) {
 
-			return callback(null, token === internals.token, internals.validUser);
-		};
+            expect(err).to.not.exist();
 
-		var server = new Hapi.Server();
-		server.connection();
+            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
 
-		server.register(require('../'), function (err) {
-			expect(err).to.not.exist();
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: 'default',
+                    handler: function (request, reply) {
 
-			server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+                        return reply('ok');
+                    }
+                }
+            });
 
-			server.route({method: 'GET', path: '/login/{user}', config: {auth: 'default', handler: function (request, reply) {return reply('ok');}}});
+            var request = {method: 'GET',	url: '/login/testuser'};
 
-			var request = {method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader }};
+            server.inject(request, function (res) {
 
-			server.inject(request, function (res) {
+                expect(res.result).to.exist();
+                expect(res.statusCode).to.equal(401);
 
-				expect(res.result).to.exist();
-				expect(res.statusCode).to.equal(406);
+                done();
+            });
+        });
+    });
 
-				done();
-			});
-		});
-	});
+    it('Returns unAuthorized error if authorization header is undefined', function (done) {
+
+        var validFunc = function (token, callback) {
+
+            expect(token).to.exist();
+
+            return callback(null, token === internals.token, internals.validUser);
+        };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register(require('../'), function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: 'default',
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = {method: 'GET',	url: '/login/testuser', headers: { Authorization: undefined }};
+
+            server.inject(request, function (res) {
+
+                expect(res.result).to.exist();
+                expect(res.statusCode).to.equal(401);
+
+                done();
+            });
+        });
+    });
+
+    it('Returns notAcceptable error if authorization header is not bearer', function (done) {
+
+        var validFunc = function (token, callback) {
+
+            expect(token).to.exist();
+
+            return callback(null, token === internals.token, internals.validUser);
+        };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register(require('../'), function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: 'default',
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = {method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader }};
+
+            server.inject(request, function (res) {
+
+                expect(res.result).to.exist();
+                expect(res.statusCode).to.equal(406);
+
+                done();
+            });
+        });
+    });
 });
