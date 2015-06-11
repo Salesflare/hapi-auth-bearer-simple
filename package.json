@@ -4,7 +4,7 @@
   "version": "1.1.4",
   "author": "Adri Van Houdt <adri@salesflare.com>",
   "private": false,
-  "main": "index.js",
+  "main": "lib/index.js",
   "multiple": true,
   "keywords": [
     "hapijs",
