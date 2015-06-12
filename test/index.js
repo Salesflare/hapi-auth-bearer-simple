@@ -40,7 +40,7 @@ lab.experiment('Integration', function () {
 
             expect(err).to.not.exist();
 
-            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
             server.route({
                 method: 'GET',
@@ -54,7 +54,7 @@ lab.experiment('Integration', function () {
                 }
             });
 
-            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+            var request = { method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader } };
 
             server.inject(request, function (res) {
 
@@ -102,7 +102,7 @@ lab.experiment('Integration', function () {
                 }
             });
 
-            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+            var request = { method: 'GET', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
             server.inject(request, function (res) {
 
@@ -130,7 +130,7 @@ lab.experiment('Integration', function () {
 
             expect(err).to.not.exist();
 
-            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
             server.route({
                 method: 'GET',
@@ -144,7 +144,7 @@ lab.experiment('Integration', function () {
                 }
             });
 
-            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+            var request = { method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader } };
 
             server.inject(request, function (res) {
 
@@ -172,7 +172,7 @@ lab.experiment('Integration', function () {
 
             expect(err).to.not.exist();
 
-            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
             server.route({
                 method: 'GET',
@@ -186,7 +186,7 @@ lab.experiment('Integration', function () {
                 }
             });
 
-            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+            var request = { method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader } };
 
             server.inject(request, function (res) {
 
@@ -214,7 +214,7 @@ lab.experiment('Integration', function () {
 
             expect(err).to.not.exist();
 
-            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
             server.route({
                 method: 'GET',
@@ -228,7 +228,7 @@ lab.experiment('Integration', function () {
                 }
             });
 
-            var request = {method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader }};
+            var request = { method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader } };
 
             server.inject(request, function (res) {
 
@@ -256,7 +256,7 @@ lab.experiment('Integration', function () {
 
             expect(err).to.not.exist();
 
-            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
             server.route({
                 method: 'GET',
@@ -270,7 +270,7 @@ lab.experiment('Integration', function () {
                 }
             });
 
-            var request = {method: 'GET',	url: '/login/testuser'};
+            var request = { method: 'GET',	url: '/login/testuser' };
 
             server.inject(request, function (res) {
 
@@ -298,7 +298,7 @@ lab.experiment('Integration', function () {
 
             expect(err).to.not.exist();
 
-            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
             server.route({
                 method: 'GET',
@@ -312,7 +312,7 @@ lab.experiment('Integration', function () {
                 }
             });
 
-            var request = {method: 'GET',	url: '/login/testuser', headers: { Authorization: undefined }};
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: undefined } };
 
             server.inject(request, function (res) {
 
@@ -340,7 +340,7 @@ lab.experiment('Integration', function () {
 
             expect(err).to.not.exist();
 
-            server.auth.strategy('default', 'bearerAuth', true, {validateFunction: validFunc});
+            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
             server.route({
                 method: 'GET',
@@ -354,7 +354,7 @@ lab.experiment('Integration', function () {
                 }
             });
 
-            var request = {method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader }};
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader } };
 
             server.inject(request, function (res) {
 
