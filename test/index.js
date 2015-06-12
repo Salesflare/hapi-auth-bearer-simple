@@ -36,7 +36,7 @@ lab.experiment('Integration', function () {
         var server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../'), function (err) {
+        server.register(require('../lib/'), function (err) {
 
             expect(err).to.not.exist();
 
@@ -81,7 +81,7 @@ lab.experiment('Integration', function () {
         var server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../'), function (err) {
+        server.register(require('../lib/'), function (err) {
 
             expect(err).to.not.exist();
 
@@ -126,7 +126,7 @@ lab.experiment('Integration', function () {
         var server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../'), function (err) {
+        server.register(require('../lib/'), function (err) {
 
             expect(err).to.not.exist();
 
@@ -168,7 +168,7 @@ lab.experiment('Integration', function () {
         var server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../'), function (err) {
+        server.register(require('../lib/'), function (err) {
 
             expect(err).to.not.exist();
 
@@ -210,7 +210,7 @@ lab.experiment('Integration', function () {
         var server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../'), function (err) {
+        server.register(require('../lib/'), function (err) {
 
             expect(err).to.not.exist();
 
@@ -252,7 +252,7 @@ lab.experiment('Integration', function () {
         var server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../'), function (err) {
+        server.register(require('../lib/'), function (err) {
 
             expect(err).to.not.exist();
 
@@ -294,7 +294,7 @@ lab.experiment('Integration', function () {
         var server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../'), function (err) {
+        server.register(require('../lib/'), function (err) {
 
             expect(err).to.not.exist();
 
@@ -336,7 +336,7 @@ lab.experiment('Integration', function () {
         var server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../'), function (err) {
+        server.register(require('../lib/'), function (err) {
 
             expect(err).to.not.exist();
 
