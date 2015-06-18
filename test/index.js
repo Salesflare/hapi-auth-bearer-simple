@@ -11,12 +11,10 @@ var expect = Code.expect;
 var internals = {
     validCredentials: {
         email: 'test@test.com',
-        token: 'abc',
-        scope: 'user'
+        token: 'abc'
     },
     validUser: {
-        email: 'test@test.com',
-        scope: 'user'
+        email: 'test@test.com'
     },
     token: 'abc',
     authorizationHeader: 'Bearer abc',
