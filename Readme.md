@@ -63,6 +63,6 @@ server.register(require('hapi-auth-bearer-simple'), function (err) {
 
 ## Notes
  - 100% code coverage!
- - You can chain strategies when you give no `error` and `isValid = true` but leave the `credentials` empty.
+ - You can chain strategies see http://hapijs.com/api#serverauthschemename-scheme.
  - If you have any problems and/or questions make a new [**issue**](https://github.com/Salesflare/hapi-auth-bearer-simple/issues).
  - If you want to contribute feel free to fork and add a pull request or again make an [**issue**](https://github.com/Salesflare/hapi-auth-bearer-simple/issues).
