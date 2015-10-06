@@ -29,10 +29,10 @@
     "hapi": "10.4.0"
   },
   "peerDependencies": {
-    "hapi": ">=8.x.x"
+    "hapi": ">=10.x.x"
   },
   "engines": {
-    "node": ">=0.10.33"
+    "node": ">=0.10.40"
   },
   "scripts": {
     "test": "lab -a code -vL -t 100"
