@@ -18,8 +18,28 @@ var internals = {
     },
     token: 'abc',
     authorizationHeader: 'Bearer abc',
-    invalidAuhtorizationHeader: 'NotBearer abc'
+    invalidAuthorizationHeader: 'NotBearer abc',
+    mockAuthScheme: {
+        register: function (server, options, next) {
+
+            server.auth.scheme('mockAuth', function (svr, opts) {
+
+                return {
+                    authenticate: function (request, reply) {
+
+                        opts.authSchemeCalled = true;
+                        reply.continue({
+                            credentials: {}
+                        });
+                    }
+                };
+            });
+            next();
+        }
+    }
 };
+
+internals.mockAuthScheme.register.attributes = { name: 'mock-auth', version: '1.0.0' };
 
 
 lab.experiment('Integration', function () {
@@ -324,7 +344,7 @@ lab.experiment('Integration', function () {
         });
     });
 
-    it('Returns notAcceptable error if authorization header is not bearer', function (done) {
+    it('Returns unAuthorized error if authorization header is not bearer', function (done) {
 
         var validFunc = function (token, callback) {
 
@@ -354,12 +374,440 @@ lab.experiment('Integration', function () {
                 }
             });
 
-            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader } };
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuthorizationHeader } };
 
             server.inject(request, function (res) {
 
                 expect(res.result).to.exist();
-                expect(res.statusCode).to.equal(406);
+                expect(res.statusCode).to.equal(401);
+
+                done();
+            });
+        });
+    });
+
+    it('should try next strategy if auth mode is "try" and authorization header is missing', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {} });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'try',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser' };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(200);
+                expect(mockOptions.authSchemeCalled).to.equal(true);
+
+                done();
+            });
+        });
+    });
+
+    it('should try next strategy if auth mode is "try" and authorization header does not have bearer prefix', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {} });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'try',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuthorizationHeader } };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(200);
+                expect(mockOptions.authSchemeCalled).to.equal(true);
+
+                done();
+            });
+        });
+    });
+
+    it('should try next strategy if auth mode is "try" and authorization header is invalid', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {
+
+                callback(null, false);
+            } });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'try',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(200);
+                expect(mockOptions.authSchemeCalled).to.equal(true);
+
+                done();
+            });
+        });
+    });
+
+    it('should try next strategy if auth mode is "try" and validation returns error', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {
+
+                callback(new Error('Canned error'), false);
+            } });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'try',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(200);
+                expect(mockOptions.authSchemeCalled).to.equal(true);
+
+                done();
+            });
+        });
+    });
+
+    it('should try next strategy if auth mode is "try" and credentials are missing', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {
+
+                callback(null, true);
+            } });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'try',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(200);
+                expect(mockOptions.authSchemeCalled).to.equal(true);
+
+                done();
+            });
+        });
+    });
+
+    it('should try next strategy if auth mode is "optional" and authorization header is missing', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {} });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'optional',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser' };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(200);
+                expect(mockOptions.authSchemeCalled).to.equal(true);
+
+                done();
+            });
+        });
+    });
+
+    it('should try next strategy if auth mode is "optional" and authorization header does not have bearer prefix', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {} });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'optional',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuthorizationHeader } };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(200);
+                expect(mockOptions.authSchemeCalled).to.equal(true);
+
+                done();
+            });
+        });
+    });
+
+    it('should NOT try next strategy if auth mode is "optional" and authorization header is invalid', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {
+
+                callback(null, false);
+            } });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'optional',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(401);
+                expect(mockOptions.authSchemeCalled).to.equal(false);
+
+                done();
+            });
+        });
+    });
+
+    it('should NOT try next strategy if auth mode is "optional" and validation returns error', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {
+
+                callback(new Error('Canned error'), false);
+            } });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'optional',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(401);
+                expect(mockOptions.authSchemeCalled).to.equal(false);
+
+                done();
+            });
+        });
+    });
+
+    it('should NOT try next strategy if auth mode is "optional" and credentials are missing', function (done) {
+
+        var mockOptions = { authSchemeCalled: false };
+
+        var server = new Hapi.Server();
+        server.connection();
+
+        server.register([internals.mockAuthScheme, require('../lib/')], function (err) {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', { validateFunction: function (token, callback) {
+
+                callback(null, true);
+            } });
+            server.auth.strategy('mock', 'mockAuth', mockOptions);
+
+            server.route({
+                method: 'GET',
+                path: '/login/{user}',
+                config: {
+                    auth: {
+                        mode: 'optional',
+                        strategies: ['default', 'mock']
+                    },
+                    handler: function (request, reply) {
+
+                        return reply('ok');
+                    }
+                }
+            });
+
+            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+
+            server.inject(request, function (res) {
+
+                expect(res.statusCode).to.equal(401);
+                expect(mockOptions.authSchemeCalled).to.equal(false);
 
                 done();
             });
