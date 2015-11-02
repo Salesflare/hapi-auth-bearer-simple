@@ -1,14 +1,14 @@
 'use strict';
 
-var Code = require('code');
-var Hapi = require('hapi');
-var Lab = require('lab');
+const Code = require('code');
+const Hapi = require('hapi');
+const Lab = require('lab');
 
-var lab = exports.lab = Lab.script();
-var it = lab.it;
-var expect = Code.expect;
+const lab = exports.lab = Lab.script();
+const it = lab.it;
+const expect = Code.expect;
 
-var internals = {
+const internals = {
     validCredentials: {
         email: 'test@test.com',
         token: 'abc'
@@ -22,21 +22,21 @@ var internals = {
 };
 
 
-lab.experiment('Integration', function () {
+lab.experiment('Integration', () => {
 
-    it('authenticates a request', function (done) {
+    it('authenticates a request', (done) => {
 
-        var validFunc = function (token, callback) {
+        const validFunc = (token, callback) => {
 
             expect(token).to.exist();
 
             return callback(null, token === internals.token, internals.validUser);
         };
 
-        var server = new Hapi.Server();
+        const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), function (err) {
+        server.register(require('../lib/'), (err) => {
 
             expect(err).to.not.exist();
 
@@ -47,16 +47,16 @@ lab.experiment('Integration', function () {
                 path: '/login/{user}',
                 config: {
                     auth: 'default',
-                    handler: function (request, reply) {
+                    handler: (request, reply) => {
 
                         return reply(request.auth.credentials);
                     }
                 }
             });
 
-            var request = { method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader } };
+            const request = { method: 'GET', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, function (res) {
+            server.inject(request, (res) => {
 
                 expect(res.statusCode).to.equal(200);
                 expect(res.result).to.exist();
@@ -66,9 +66,9 @@ lab.experiment('Integration', function () {
         });
     });
 
-    it('exposes the request object', function (done) {
+    it('exposes the request object', (done) => {
 
-        var validFunc = function (token, request, callback) {
+        const validFunc = function (token, request, callback) {
 
             expect(token).to.exist();
             expect(request).to.exist();
@@ -78,10 +78,10 @@ lab.experiment('Integration', function () {
             return callback(null, token === internals.token, internals.validUser);
         };
 
-        var server = new Hapi.Server();
+        const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), function (err) {
+        server.register(require('../lib/'), (err) => {
 
             expect(err).to.not.exist();
 
@@ -95,16 +95,16 @@ lab.experiment('Integration', function () {
                 path: '/login/{user}',
                 config: {
                     auth: 'default',
-                    handler: function (request, reply) {
+                    handler: (request, reply) => {
 
                         return reply(request.auth.credentials);
                     }
                 }
             });
 
-            var request = { method: 'GET', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+            const request = { method: 'GET', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, function (res) {
+            server.inject(request, (res) => {
 
                 expect(res.statusCode).to.equal(200);
                 expect(res.result).to.exist();
@@ -114,19 +114,19 @@ lab.experiment('Integration', function () {
         });
     });
 
-    it('Returns unAuthorized error if validFunction throws error', function (done) {
+    it('Returns unAuthorized error if validFunction throws error', (done) => {
 
-        var validFunc = function (token, callback) {
+        const validFunc = (token, callback) => {
 
             expect(token).to.exist();
 
             return callback('401', false, null);
         };
 
-        var server = new Hapi.Server();
+        const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), function (err) {
+        server.register(require('../lib/'), (err) => {
 
             expect(err).to.not.exist();
 
@@ -137,16 +137,16 @@ lab.experiment('Integration', function () {
                 path: '/login/{user}',
                 config: {
                     auth: 'default',
-                    handler: function (request, reply) {
+                    handler: (request, reply) => {
 
                         return reply('ok');
                     }
                 }
             });
 
-            var request = { method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader } };
+            const request = { method: 'GET', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, function (res) {
+            server.inject(request, (res) => {
 
                 expect(res.result).to.exist();
                 expect(res.statusCode).to.equal(401);
@@ -156,19 +156,19 @@ lab.experiment('Integration', function () {
         });
     });
 
-    it('Returns unAuthorized error if validFunction determines token is not valid', function (done) {
+    it('Returns unAuthorized error if validFunction determines token is not valid', (done) => {
 
-        var validFunc = function (token, callback) {
+        const validFunc = (token, callback) => {
 
             expect(token).to.exist();
 
             return callback(null, token !== internals.token, null);
         };
 
-        var server = new Hapi.Server();
+        const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), function (err) {
+        server.register(require('../lib/'), (err) => {
 
             expect(err).to.not.exist();
 
@@ -179,16 +179,16 @@ lab.experiment('Integration', function () {
                 path: '/login/{user}',
                 config: {
                     auth: 'default',
-                    handler: function (request, reply) {
+                    handler: (request, reply) => {
 
                         return reply('ok');
                     }
                 }
             });
 
-            var request = { method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader } };
+            const request = { method: 'GET', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, function (res) {
+            server.inject(request, (res) => {
 
                 expect(res.result).to.exist();
                 expect(res.statusCode).to.equal(401);
@@ -198,19 +198,19 @@ lab.experiment('Integration', function () {
         });
     });
 
-    it('Returns unAuthorized error if validFunction does not return credentials', function (done) {
+    it('Returns unAuthorized error if validFunction does not return credentials', (done) => {
 
-        var validFunc = function (token, callback) {
+        const validFunc = (token, callback) => {
 
             expect(token).to.exist();
 
             return callback(null, token === internals.token, null);
         };
 
-        var server = new Hapi.Server();
+        const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), function (err) {
+        server.register(require('../lib/'), (err) => {
 
             expect(err).to.not.exist();
 
@@ -221,16 +221,16 @@ lab.experiment('Integration', function () {
                 path: '/login/{user}',
                 config: {
                     auth: 'default',
-                    handler: function (request, reply) {
+                    handler: (request, reply) => {
 
                         return reply('ok');
                     }
                 }
             });
 
-            var request = { method: 'GET',	url: '/login/testuser',	headers: { Authorization: internals.authorizationHeader } };
+            const request = { method: 'GET', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, function (res) {
+            server.inject(request, (res) => {
 
                 expect(res.result).to.exist();
                 expect(res.statusCode).to.equal(401);
@@ -240,19 +240,19 @@ lab.experiment('Integration', function () {
         });
     });
 
-    it('Returns unAuthorized error if no authorization header', function (done) {
+    it('Returns unAuthorized error if no authorization header', (done) => {
 
-        var validFunc = function (token, callback) {
+        const validFunc = (token, callback) => {
 
             expect(token).to.exist();
 
             return callback(null, token === internals.token, internals.validUser);
         };
 
-        var server = new Hapi.Server();
+        const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), function (err) {
+        server.register(require('../lib/'), (err) => {
 
             expect(err).to.not.exist();
 
@@ -263,16 +263,16 @@ lab.experiment('Integration', function () {
                 path: '/login/{user}',
                 config: {
                     auth: 'default',
-                    handler: function (request, reply) {
+                    handler: (request, reply) => {
 
                         return reply('ok');
                     }
                 }
             });
 
-            var request = { method: 'GET',	url: '/login/testuser' };
+            const request = { method: 'GET', url: '/login/testuser' };
 
-            server.inject(request, function (res) {
+            server.inject(request, (res) => {
 
                 expect(res.result).to.exist();
                 expect(res.statusCode).to.equal(401);
@@ -282,19 +282,19 @@ lab.experiment('Integration', function () {
         });
     });
 
-    it('Returns unAuthorized error if authorization header is undefined', function (done) {
+    it('Returns unAuthorized error if authorization header is undefined', (done) => {
 
-        var validFunc = function (token, callback) {
+        const validFunc = (token, callback) => {
 
             expect(token).to.exist();
 
             return callback(null, token === internals.token, internals.validUser);
         };
 
-        var server = new Hapi.Server();
+        const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), function (err) {
+        server.register(require('../lib/'), (err) => {
 
             expect(err).to.not.exist();
 
@@ -305,16 +305,16 @@ lab.experiment('Integration', function () {
                 path: '/login/{user}',
                 config: {
                     auth: 'default',
-                    handler: function (request, reply) {
+                    handler: (request, reply) => {
 
                         return reply('ok');
                     }
                 }
             });
 
-            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: undefined } };
+            const request = { method: 'GET', url: '/login/testuser', headers: { Authorization: undefined } };
 
-            server.inject(request, function (res) {
+            server.inject(request, (res) => {
 
                 expect(res.result).to.exist();
                 expect(res.statusCode).to.equal(401);
@@ -324,19 +324,19 @@ lab.experiment('Integration', function () {
         });
     });
 
-    it('Returns notAcceptable error if authorization header is not bearer', function (done) {
+    it('Returns notAcceptable error if authorization header is not bearer', (done) => {
 
-        var validFunc = function (token, callback) {
+        const validFunc = (token, callback) => {
 
             expect(token).to.exist();
 
             return callback(null, token === internals.token, internals.validUser);
         };
 
-        var server = new Hapi.Server();
+        const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), function (err) {
+        server.register(require('../lib/'), (err) => {
 
             expect(err).to.not.exist();
 
@@ -347,16 +347,16 @@ lab.experiment('Integration', function () {
                 path: '/login/{user}',
                 config: {
                     auth: 'default',
-                    handler: function (request, reply) {
+                    handler: (request, reply) => {
 
                         return reply('ok');
                     }
                 }
             });
 
-            var request = { method: 'GET',	url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader } };
+            const request = { method: 'GET', url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader } };
 
-            server.inject(request, function (res) {
+            server.inject(request, (res) => {
 
                 expect(res.result).to.exist();
                 expect(res.statusCode).to.equal(406);
