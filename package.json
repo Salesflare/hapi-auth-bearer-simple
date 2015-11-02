@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "boom": "2.10.x",
-    "hoek": "2.16.x"
+    "hoek": "3.0.1"
   },
   "devDependencies": {
     "lab": "7.1.0",
