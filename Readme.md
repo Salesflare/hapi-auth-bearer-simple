@@ -1,4 +1,4 @@
-![Build Status](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple.svg?branch=master)  ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple.svg) ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple/dev-status.svg) ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple/peer-status.svg)
+[![Build Status](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple.svg?branch=master)](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple)  ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple.svg) ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple/dev-status.svg) ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple/peer-status.svg)
 [![Code Climate](https://codeclimate.com/github/Salesflare/hapi-auth-bearer-simple/badges/gpa.svg)](https://codeclimate.com/github/Salesflare/hapi-auth-bearer-simple)
 
 # Hapi authentication plugin
@@ -16,14 +16,17 @@ var validateFunction = function (token, callback) {
     // Use a real strategy here to check if the token is valid
     if (token === 'abc456789') {
         callback(null, true, userCredentials);
-    } else {
+    }
+    else {
         callback(null, false, userCredentials);
     }
 };
 
 server.register(require('hapi-auth-bearer-simple'), function (err) {
 
-    if (err) throw err;
+    if (err) {
+        throw err;
+    }
 
     server.auth.strategy('bearer', 'bearerAuth', {
         validateFunction: validateFunction
@@ -45,8 +48,12 @@ server.register(require('hapi-auth-bearer-simple'), function (err) {
         }
     });
 
-    server.start(function () {
+    server.start(function (err) {
 
+        if (err) {
+            throw err;
+        }
+        
         server.log([],'Server started at: ' + server.info.uri);
     });
 });
@@ -58,8 +65,8 @@ server.register(require('hapi-auth-bearer-simple'), function (err) {
     - `callback` - a callback function with the signature `function (err, isValid, credentials)` where:
         - `err` - any error.
         - `isValid` - `true` if both the username was found and the password matched, otherwise `false`.
-        - `credentials` - an object passed back to the plugin and which will become available in the `request`object as `request.auth.credentials`. Normally credentials are only included when `isValid`is `true`. This object can be only the token as in the example but is preferably all the info you need from the authenticated user
-- `exposeRequest` - (optional / advanced) If set to `true` the `validateFunction`'s signature will be `function (token, request, callback)`. This can be usefull if you have plugins that expose certain functions/object to the `request` object and you want to use them in your `validateFunction`. Be aware that modifying the object is not recommended because this is the same object that you will use in the whole lifecycle. Also exposing functions/object to the `resuest` object during the validation is not recommended. Follow the `Hapi` standards whenever you can!
+        - `credentials` - an object passed back to the plugin and which will become available in the `request`object as `request.auth.credentials`. Normally credentials are only included when `isValid`is `true`.
+- `exposeRequest` - (optional / advanced) If set to `true` the `validateFunction`'s signature will be `function (token, request, callback)`. This can be usefull if you have plugins that expose certain functions/object to the `request` object and you want to use them in your `validateFunction`. Be aware that modifying the object is not recommended because this is the same object that you will use in the whole lifecycle. Also exposing functions/object to the `request` object during the validation is not recommended. Follow the `hapi` standards whenever you can!
 
 ## Notes
  - 100% code coverage!
