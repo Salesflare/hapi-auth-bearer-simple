@@ -165,7 +165,7 @@ lab.experiment('hapi-auth-bearer-simple', () => {
             return callback(null, true, null);
         };
 
-        const server = new Hapi.Server();
+        const server = new Hapi.Server({ debug: false });
         server.connection();
 
         server.register(require('../lib/'), (err) => {
@@ -410,7 +410,7 @@ lab.experiment('hapi-auth-bearer-simple', () => {
             return callback(null, true, null);
         };
 
-        const server = new Hapi.Server();
+        const server = new Hapi.Server({ debug: false });
         server.connection();
 
         server.register(require('../lib/'), (err) => {
@@ -522,7 +522,7 @@ lab.experiment('hapi-auth-bearer-simple', () => {
                 });
             };
 
-            expect(fn).to.throw('Payload validation can only be required when all strategies support it in path: /');
+            expect(fn).to.throw('Payload validation can only be required when all strategies support it in /');
             done();
         });
     });
@@ -563,7 +563,7 @@ lab.experiment('hapi-auth-bearer-simple', () => {
                 });
             };
 
-            expect(fn).to.throw('Payload authentication requires at least one strategy with payload support in path: /');
+            expect(fn).to.throw('Payload authentication requires at least one strategy with payload support in /');
             done();
         });
     });
