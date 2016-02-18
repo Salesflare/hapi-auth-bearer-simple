@@ -234,6 +234,7 @@ lab.experiment('hapi-auth-bearer-simple', () => {
 
                 expect(res.result).to.exist();
                 expect(res.statusCode).to.equal(401);
+                expect(res.payload.message).to.be.undefined();
 
                 done();
             });
@@ -276,6 +277,7 @@ lab.experiment('hapi-auth-bearer-simple', () => {
 
                 expect(res.result).to.exist();
                 expect(res.statusCode).to.equal(401);
+                expect(res.payload.message).to.be.undefined();
 
                 done();
             });
@@ -318,13 +320,14 @@ lab.experiment('hapi-auth-bearer-simple', () => {
 
                 expect(res.result).to.exist();
                 expect(res.statusCode).to.equal(401);
+                expect(res.payload.message).to.be.undefined();
 
                 done();
             });
         });
     });
 
-    it('Returns badRequest error if authorization header is not bearer', (done) => {
+    it('Returns unAuthorized error if authorization header is not bearer', (done) => {
 
         const validFunc = (token, callback) => {
 
@@ -359,7 +362,8 @@ lab.experiment('hapi-auth-bearer-simple', () => {
             server.inject(request, (res) => {
 
                 expect(res.result).to.exist();
-                expect(res.statusCode).to.equal(400);
+                expect(res.statusCode).to.equal(401);
+                expect(res.payload.message).to.be.undefined();
 
                 done();
             });
