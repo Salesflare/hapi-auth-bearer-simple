@@ -24,7 +24,7 @@
     "hoek": "3.x.x"
   },
   "devDependencies": {
-    "lab": "8.x.x",
+    "lab": "9.0.0",
     "code": "2.x.x",
     "hapi": ">=11.x.x <=13.x.x"
   },
