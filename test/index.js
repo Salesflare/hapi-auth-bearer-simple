@@ -60,7 +60,7 @@ lab.experiment('hapi-auth-bearer-simple', () => {
 
                 expect(res.statusCode).to.equal(200);
                 expect(res.result).to.exist();
-                expect(res.result).to.deep.equal(internals.validCredentials);
+                expect(res.result).to.equal(internals.validCredentials);
                 done();
             });
         });
@@ -108,7 +108,7 @@ lab.experiment('hapi-auth-bearer-simple', () => {
 
                 expect(res.statusCode).to.equal(200);
                 expect(res.result).to.exist();
-                expect(res.result).to.deep.equal(internals.validCredentials);
+                expect(res.result).to.equal(internals.validCredentials);
                 done();
             });
         });
