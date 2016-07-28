@@ -6,7 +6,7 @@
 > [**hapi**](https://github.com/hapijs/hapi) Bearer Token Authentication Scheme
 
 ## What
-The plugin requires validating a token passed in by the bearer authorization header. The validation function is something you have to provide to the plugin.
+The plugin requires validating a token passed in by the bearer authorization header or via the `access_token` query param. The validation function is something you have to provide to the plugin.
 
 ## How
 

@@ -24,7 +24,7 @@ const internals = {
 
 lab.experiment('hapi-auth-bearer-simple', () => {
 
-    it('authenticates a request', (done) => {
+    it('authenticates a request with Authorization header', (done) => {
 
         const validFunc = (token, callback) => {
 
@@ -55,6 +55,48 @@ lab.experiment('hapi-auth-bearer-simple', () => {
             });
 
             const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+
+            server.inject(request, (res) => {
+
+                expect(res.statusCode).to.equal(200);
+                expect(res.result).to.exist();
+                expect(res.result).to.equal(internals.validCredentials);
+                done();
+            });
+        });
+    });
+
+    it('authenticates a request with access_token query param', (done) => {
+
+        const validFunc = (token, callback) => {
+
+            expect(token).to.exist();
+
+            return callback(null, token === internals.token, internals.validUser);
+        };
+
+        const server = new Hapi.Server();
+        server.connection();
+
+        server.register(require('../lib/'), (err) => {
+
+            expect(err).to.not.exist();
+
+            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
+
+            server.route({
+                method: 'POST',
+                path: '/login/{user}',
+                config: {
+                    auth: 'default',
+                    handler: (request, reply) => {
+
+                        return reply(request.auth.credentials);
+                    }
+                }
+            });
+
+            const request = { method: 'POST', url: '/login/testuser?access_token=' + internals.token };
 
             server.inject(request, (res) => {
 
