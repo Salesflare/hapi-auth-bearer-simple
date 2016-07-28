@@ -110,12 +110,12 @@ lab.experiment('hapi-auth-bearer-simple', () => {
 
     it('exposes the request object', (done) => {
 
-        const validFunc = function (token, request, callback) {
+        const validFunc = function (token, callback) {
 
             expect(token).to.exist();
-            expect(request).to.exist();
-            expect(request).to.be.an.object();
-            expect(request.path).to.equal('/login/testuser');
+            expect(this).to.exist();
+            expect(this).to.be.an.object();
+            expect(this.path).to.equal('/login/testuser');
 
             return callback(null, token === internals.token, internals.validUser);
         };

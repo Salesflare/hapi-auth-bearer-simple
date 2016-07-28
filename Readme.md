@@ -59,14 +59,13 @@ server.register(require('hapi-auth-bearer-simple'), function (err) {
 });
 ```
 
-- `validateFunc` - (required) a token lookup and validation function with the signature `function (token, [request], callback)`
+- `validateFunc` - (required) a token lookup and validation function with the signature `function (token, callback)`
     - `token` - the auth token received from the client.
-    - `request` - Optional request object. See below.
     - `callback` - a callback function with the signature `function (err, isValid, credentials)` where:
         - `err` - any error.
         - `isValid` - `true` if both the username was found and the password matched, otherwise `false`.
         - `credentials` - an object passed back to the plugin and which will become available in the `request`object as `request.auth.credentials`. Normally credentials are only included when `isValid`is `true`.
-- `exposeRequest` - (optional / advanced) If set to `true` the `validateFunction`'s signature will be `function (token, request, callback)`. This can be usefull if you have plugins that expose certain functions/object to the `request` object and you want to use them in your `validateFunction`. Be aware that modifying the object is not recommended because this is the same object that you will use in the whole lifecycle. Also exposing functions/object to the `request` object during the validation is not recommended. Follow the `hapi` standards whenever you can!
+- `exposeRequest` - (optional / advanced) If set to `true` the `validateFunction`'s `this` will be set to the `request`. This can be usefull if you have plugins that expose certain functions/objects on the `request` object and you want to use them in your `validateFunction`.
 
 ## Notes
  - 100% code coverage!
