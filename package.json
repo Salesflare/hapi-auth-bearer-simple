@@ -26,10 +26,10 @@
   "devDependencies": {
     "lab": "10.x.x",
     "code": "3.x.x",
-    "hapi": "13.x.x"
+    "hapi": "14.x.x"
   },
   "peerDependencies": {
-    "hapi": "13.x.x"
+    "hapi": "14.x.x"
   },
   "engines": {
     "node": ">=4.0.0"
