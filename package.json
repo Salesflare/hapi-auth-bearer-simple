@@ -26,7 +26,7 @@
   "devDependencies": {
     "lab": "11.x.x",
     "code": "3.x.x",
-    "hapi": "14.x.x"
+    "hapi": "15.0.2"
   },
   "peerDependencies": {
     "hapi": "14.x.x"
