@@ -1,7 +1,7 @@
 {
   "name": "hapi-auth-bearer-simple",
   "description": "Custom authentication plugin for Hapi using Bearer tokens",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "author": "Adri Van Houdt <adri@salesflare.com>",
   "private": false,
   "main": "lib/index.js",
