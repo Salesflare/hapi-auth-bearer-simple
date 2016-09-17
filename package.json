@@ -20,13 +20,13 @@
     "url": "https://github.com/Salesflare/hapi-auth-bearer-plugin"
   },
   "dependencies": {
-    "boom": "3.x.x",
+    "boom": "4.x.x",
     "hoek": "4.x.x"
   },
   "devDependencies": {
     "lab": "11.x.x",
     "code": "3.x.x",
-    "hapi": "14.x.x"
+    "hapi": "15.x.x"
   },
   "peerDependencies": {
     "hapi": "14.x.x"
