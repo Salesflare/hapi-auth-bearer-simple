@@ -29,7 +29,7 @@
     "hapi": "15.x.x"
   },
   "peerDependencies": {
-    "hapi": "14.x.x"
+    "hapi": ">14.x.x"
   },
   "engines": {
     "node": ">=4.0.0"
