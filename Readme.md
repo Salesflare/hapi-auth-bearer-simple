@@ -59,7 +59,7 @@ server.register(require('hapi-auth-bearer-simple'), function (err) {
 });
 ```
 
-- `validateFunc` - (required) a token lookup and validation function with the signature `function (token, callback)`
+- `validateFunction` - (required) a token lookup and validation function with the signature `function (token, callback)`
     - `token` - the auth token received from the client.
     - `callback` - a callback function with the signature `function (err, isValid, credentials)` where:
         - `err` - any error.
