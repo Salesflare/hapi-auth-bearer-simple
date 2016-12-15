@@ -25,11 +25,11 @@
   },
   "devDependencies": {
     "lab": "11.x.x",
-    "code": "3.x.x",
-    "hapi": "15.x.x"
+    "code": "4.x.x",
+    "hapi": "16.x.x"
   },
   "peerDependencies": {
-    "hapi": ">14.x.x"
+    "hapi": ">15.x.x"
   },
   "engines": {
     "node": ">=4.0.0"
