@@ -20,7 +20,7 @@
     "url": "https://github.com/Salesflare/hapi-auth-bearer-plugin"
   },
   "dependencies": {
-    "boom": "4.x.x",
+    "boom": "^5.0.0",
     "hoek": "4.x.x"
   },
   "devDependencies": {
