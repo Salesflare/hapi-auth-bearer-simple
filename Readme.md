@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple.svg?branch=master)](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple)  ![https://david-dm.org/salesflare/hapi-auth-bearer-simple](https://david-dm.org/salesflare/hapi-auth-bearer-simple.svg) ![https://david-dm.org/salesflare/hapi-auth-bearer-simple?type=dev](https://david-dm.org/salesflare/hapi-auth-bearer-simple/dev-status.svg) ![https://david-dm.org/salesflare/hapi-auth-bearer-simple?type=peer](https://david-dm.org/salesflare/hapi-auth-bearer-simple/peer-status.svg)
+[![Build Status](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple.svg?branch=master)](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple)
+[![dep](https://david-dm.org/salesflare/hapi-auth-bearer-simple.svg)](https://david-dm.org/salesflare/hapi-auth-bearer-simple)
+[![dev](https://david-dm.org/salesflare/hapi-auth-bearer-simple/dev-status.svg)](https://david-dm.org/salesflare/hapi-auth-bearer-simple?type=dev)
+[![peer](https://david-dm.org/salesflare/hapi-auth-bearer-simple/peer-status.svg)](https://david-dm.org/salesflare/hapi-auth-bearer-simple?type=peer)
 [![Code Climate](https://codeclimate.com/github/Salesflare/hapi-auth-bearer-simple/badges/gpa.svg)](https://codeclimate.com/github/Salesflare/hapi-auth-bearer-simple)
 
 # Hapi authentication plugin
