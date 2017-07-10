@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple.svg?branch=master)](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple)  ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple.svg) ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple/dev-status.svg) ![](https://david-dm.org/salesflare/hapi-auth-bearer-simple/peer-status.svg)
+[![Build Status](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple.svg?branch=master)](https://travis-ci.org/Salesflare/hapi-auth-bearer-simple)  ![https://david-dm.org/salesflare/hapi-auth-bearer-simple](https://david-dm.org/salesflare/hapi-auth-bearer-simple.svg) ![https://david-dm.org/salesflare/hapi-auth-bearer-simple?type=dev](https://david-dm.org/salesflare/hapi-auth-bearer-simple/dev-status.svg) ![https://david-dm.org/salesflare/hapi-auth-bearer-simple?type=peer](https://david-dm.org/salesflare/hapi-auth-bearer-simple/peer-status.svg)
 [![Code Climate](https://codeclimate.com/github/Salesflare/hapi-auth-bearer-simple/badges/gpa.svg)](https://codeclimate.com/github/Salesflare/hapi-auth-bearer-simple)
 
 # Hapi authentication plugin
@@ -6,6 +6,7 @@
 > [**hapi**](https://github.com/hapijs/hapi) Bearer Token Authentication Scheme
 
 ## What
+
 The plugin requires validating a token passed in by the bearer authorization header or via the `access_token` query param. The validation function is something you have to provide to the plugin.
 
 ## How
@@ -53,7 +54,7 @@ server.register(require('hapi-auth-bearer-simple'), function (err) {
         if (err) {
             throw err;
         }
-        
+
         server.log([],'Server started at: ' + server.info.uri);
     });
 });
@@ -68,7 +69,8 @@ server.register(require('hapi-auth-bearer-simple'), function (err) {
 - `exposeRequest` - (optional / advanced) If set to `true` the `validateFunction`'s `this` will be set to the `request`. This can be usefull if you have plugins that expose certain functions/objects on the `request` object and you want to use them in your `validateFunction`.
 
 ## Notes
- - 100% code coverage!
- - You can chain strategies see http://hapijs.com/api#serverauthschemename-scheme.
- - If you have any problems and/or questions make a new [**issue**](https://github.com/Salesflare/hapi-auth-bearer-simple/issues).
- - If you want to contribute feel free to fork and add a pull request or again make an [**issue**](https://github.com/Salesflare/hapi-auth-bearer-simple/issues).
+
+- 100% code coverage!
+- You can chain strategies see [](http://hapijs.com/api#serverauthschemename-scheme).
+- If you have any problems and/or questions make a new [**issue**](https://github.com/Salesflare/hapi-auth-bearer-simple/issues).
+- If you want to contribute feel free to fork and add a pull request or again make an [**issue**](https://github.com/Salesflare/hapi-auth-bearer-simple/issues).
