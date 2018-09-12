@@ -24,7 +24,7 @@ const internals = {
 
 lab.experiment('hapi-auth-bearer-simple', () => {
 
-    it('authenticates a request with Authorization header', (done) => {
+    it('authenticates a request with Authorization header', () => {
 
         const validFunc = (token, callback) => {
 
@@ -36,37 +36,40 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                config: {
-                    auth: 'default',
-                    handler: (request, reply) => {
+                server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
-                        return reply(request.auth.credentials);
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    config: {
+                        auth: 'default',
+                        handler: (request, reply) => {
+
+                            return reply(request.auth.credentials);
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+                const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, (res) => {
+                server.inject(request, (res) => {
 
-                expect(res.statusCode).to.equal(200);
-                expect(res.result).to.exist();
-                expect(res.result).to.equal(internals.validCredentials);
-                done();
+                    expect(res.statusCode).to.equal(200);
+                    expect(res.result).to.exist();
+                    expect(res.result).to.equal(internals.validCredentials);
+                    return resolve();
+                });
             });
         });
     });
 
-    it('authenticates a request with access_token query param', (done) => {
+    it('authenticates a request with access_token query param', () => {
 
         const validFunc = (token, callback) => {
 
@@ -78,37 +81,40 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            return server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                config: {
-                    auth: 'default',
-                    handler: (request, reply) => {
+                server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
-                        return reply(request.auth.credentials);
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    config: {
+                        auth: 'default',
+                        handler: (request, reply) => {
+
+                            return reply(request.auth.credentials);
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser?access_token=' + internals.token };
+                const request = { method: 'POST', url: '/login/testuser?access_token=' + internals.token };
 
-            server.inject(request, (res) => {
+                return server.inject(request, (res) => {
 
-                expect(res.statusCode).to.equal(200);
-                expect(res.result).to.exist();
-                expect(res.result).to.equal(internals.validCredentials);
-                done();
+                    expect(res.statusCode).to.equal(200);
+                    expect(res.result).to.exist();
+                    expect(res.result).to.equal(internals.validCredentials);
+                    return resolve();
+                });
             });
         });
     });
 
-    it('exposes the request object', (done) => {
+    it('exposes the request object', () => {
 
         const validFunc = function (token, callback) {
 
@@ -123,40 +129,43 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            return server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', true, {
-                validateFunction: validFunc,
-                exposeRequest: true
-            });
+                expect(err).to.not.exist();
 
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                config: {
-                    auth: 'default',
-                    handler: (request, reply) => {
+                server.auth.strategy('default', 'bearerAuth', true, {
+                    validateFunction: validFunc,
+                    exposeRequest: true
+                });
 
-                        return reply(request.auth.credentials);
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    config: {
+                        auth: 'default',
+                        handler: (request, reply) => {
+
+                            return reply(request.auth.credentials);
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+                const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, (res) => {
+                return server.inject(request, (res) => {
 
-                expect(res.statusCode).to.equal(200);
-                expect(res.result).to.exist();
-                expect(res.result).to.equal(internals.validCredentials);
-                done();
+                    expect(res.statusCode).to.equal(200);
+                    expect(res.result).to.exist();
+                    expect(res.result).to.equal(internals.validCredentials);
+                    return resolve();
+                });
             });
         });
     });
 
-    it('Returns unAuthorized error if validFunction throws error', (done) => {
+    it('Returns unAuthorized error if validFunction throws error', () => {
 
         const validFunc = (token, callback) => {
 
@@ -168,37 +177,40 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            return server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                config: {
-                    auth: 'default',
-                    handler: (request, reply) => {
+                server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
-                        return reply('ok');
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    config: {
+                        auth: 'default',
+                        handler: (request, reply) => {
+
+                            return reply('ok');
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+                const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, (res) => {
+                return server.inject(request, (res) => {
 
-                expect(res.result).to.exist();
-                expect(res.statusCode).to.equal(500);
+                    expect(res.result).to.exist();
+                    expect(res.statusCode).to.equal(500);
 
-                done();
+                    return resolve();
+                });
             });
         });
     });
 
-    it('Returns unAuthorized error if validFunction does not return credentials', (done) => {
+    it('Returns unAuthorized error if validFunction does not return credentials', () => {
 
         const validFunc = (token, callback) => {
 
@@ -210,37 +222,40 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server({ debug: false });
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                config: {
-                    auth: 'default',
-                    handler: (request, reply) => {
+                server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
-                        return reply('ok');
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    config: {
+                        auth: 'default',
+                        handler: (request, reply) => {
+
+                            return reply('ok');
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+                const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, (res) => {
+                server.inject(request, (res) => {
 
-                expect(res.result).to.exist();
-                expect(res.statusCode).to.equal(500);
+                    expect(res.result).to.exist();
+                    expect(res.statusCode).to.equal(500);
 
-                done();
+                    return resolve();
+                });
             });
         });
     });
 
-    it('Returns unAuthorized error if validFunction determines token is not valid', (done) => {
+    it('Returns unAuthorized error if validFunction determines token is not valid', () => {
 
         const validFunc = (token, callback) => {
 
@@ -252,38 +267,41 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                config: {
-                    auth: 'default',
-                    handler: (request, reply) => {
+                server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
-                        return reply('ok');
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    config: {
+                        auth: 'default',
+                        handler: (request, reply) => {
+
+                            return reply('ok');
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+                const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, (res) => {
+                server.inject(request, (res) => {
 
-                expect(res.result).to.exist();
-                expect(res.statusCode).to.equal(401);
-                expect(res.payload.message).to.be.undefined();
+                    expect(res.result).to.exist();
+                    expect(res.statusCode).to.equal(401);
+                    expect(res.payload.message).to.be.undefined();
 
-                done();
+                    return resolve();
+                });
             });
         });
     });
 
-    it('Returns unAuthorized error if no authorization header', (done) => {
+    it('Returns unAuthorized error if no authorization header', () => {
 
         const validFunc = (token, callback) => {
 
@@ -295,38 +313,41 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                config: {
-                    auth: 'default',
-                    handler: (request, reply) => {
+                server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
-                        return reply('ok');
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    config: {
+                        auth: 'default',
+                        handler: (request, reply) => {
+
+                            return reply('ok');
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser' };
+                const request = { method: 'POST', url: '/login/testuser' };
 
-            server.inject(request, (res) => {
+                server.inject(request, (res) => {
 
-                expect(res.result).to.exist();
-                expect(res.statusCode).to.equal(401);
-                expect(res.payload.message).to.be.undefined();
+                    expect(res.result).to.exist();
+                    expect(res.statusCode).to.equal(401);
+                    expect(res.payload.message).to.be.undefined();
 
-                done();
+                    return resolve();
+                });
             });
         });
     });
 
-    it('Returns unAuthorized error if authorization header is undefined', (done) => {
+    it('Returns unAuthorized error if authorization header is undefined', () => {
 
         const validFunc = (token, callback) => {
 
@@ -338,38 +359,41 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                config: {
-                    auth: 'default',
-                    handler: (request, reply) => {
+                server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
-                        return reply('ok');
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    config: {
+                        auth: 'default',
+                        handler: (request, reply) => {
+
+                            return reply('ok');
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: undefined } };
+                const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: undefined } };
 
-            server.inject(request, (res) => {
+                server.inject(request, (res) => {
 
-                expect(res.result).to.exist();
-                expect(res.statusCode).to.equal(401);
-                expect(res.payload.message).to.be.undefined();
+                    expect(res.result).to.exist();
+                    expect(res.statusCode).to.equal(401);
+                    expect(res.payload.message).to.be.undefined();
 
-                done();
+                    return resolve();
+                });
             });
         });
     });
 
-    it('Returns unAuthorized error if authorization header is not bearer', (done) => {
+    it('Returns unAuthorized error if authorization header is not bearer', () => {
 
         const validFunc = (token, callback) => {
 
@@ -381,73 +405,79 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                config: {
-                    auth: 'default',
-                    handler: (request, reply) => {
+                server.auth.strategy('default', 'bearerAuth', true, { validateFunction: validFunc });
 
-                        return reply('ok');
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    config: {
+                        auth: 'default',
+                        handler: (request, reply) => {
+
+                            return reply('ok');
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader } };
+                const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.invalidAuhtorizationHeader } };
 
-            server.inject(request, (res) => {
+                server.inject(request, (res) => {
 
-                expect(res.result).to.exist();
-                expect(res.statusCode).to.equal(401);
-                expect(res.payload.message).to.be.undefined();
+                    expect(res.result).to.exist();
+                    expect(res.statusCode).to.equal(401);
+                    expect(res.payload.message).to.be.undefined();
 
-                done();
+                    return resolve();
+                });
             });
         });
     });
 
-    it('returns a reply on failed optional auth', (done) => {
+    it('returns a reply on failed optional auth', () => {
 
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: () => {} });
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                handler: (request, reply) => {
+                expect(err).to.not.exist();
 
-                    return reply('ok');
-                },
-                config: {
-                    auth: {
-                        mode: 'optional'
+                server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: () => {} });
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    handler: (request, reply) => {
+
+                        return reply('ok');
+                    },
+                    config: {
+                        auth: {
+                            mode: 'optional'
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser' };
+                const request = { method: 'POST', url: '/login/testuser' };
 
-            server.inject(request, (res) => {
+                server.inject(request, (res) => {
 
-                expect(res.result).to.equal('ok');
+                    expect(res.result).to.equal('ok');
 
-                done();
+                    return resolve();
+                });
             });
         });
     });
 
-    it('errors on success optional auth but no valid credentials', (done) => {
+    it('errors on success optional auth but no valid credentials', () => {
 
         const validFunc = (token, callback) => {
 
@@ -459,37 +489,40 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server({ debug: false });
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                handler: (request, reply) => {
+                expect(err).to.not.exist();
 
-                    return reply('ok');
-                },
-                config: {
-                    auth: {
-                        mode: 'optional'
+                server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    handler: (request, reply) => {
+
+                        return reply('ok');
+                    },
+                    config: {
+                        auth: {
+                            mode: 'optional'
+                        }
                     }
-                }
-            });
+                });
 
-            const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+                const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
 
-            server.inject(request, (res) => {
+                server.inject(request, (res) => {
 
-                expect(res.result.statusCode).to.equal(500);
+                    expect(res.result.statusCode).to.equal(500);
 
-                done();
+                    return resolve();
+                });
             });
         });
     });
 
-    it('returns a reply on failed try auth', (done) => {
+    it('returns a reply on failed try auth', () => {
 
         const validFunc = (token, callback) => {
 
@@ -501,38 +534,85 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
-            server.route({
-                method: 'POST',
-                path: '/login/{user}',
-                handler: (request, reply) => {
+                expect(err).to.not.exist();
 
-                    return reply('ok');
-                },
-                config: {
-                    auth: {
-                        mode: 'try'
+                server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
+                server.route({
+                    method: 'POST',
+                    path: '/login/{user}',
+                    handler: (request, reply) => {
+
+                        return reply('ok');
+                    },
+                    config: {
+                        auth: {
+                            mode: 'try'
+                        }
                     }
-                }
+                });
+
+                const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+
+
+                server.inject(request, (res) => {
+
+                    expect(res.result).to.equal('ok');
+
+                    return resolve();
+                });
             });
+        });
+    });
 
-            const request = { method: 'POST', url: '/login/testuser', headers: { Authorization: internals.authorizationHeader } };
+    it('cannot add a route that has payload validation required', () => {
 
+        const validFunc = (token, callback) => {
 
-            server.inject(request, (res) => {
+            expect(token).to.exist();
 
-                expect(res.result).to.equal('ok');
+            return callback(null, token === internals.token, internals.validUser);
+        };
 
-                done();
+        const server = new Hapi.Server();
+        server.connection();
+
+        return new Promise((resolve) => {
+
+            server.register(require('../lib/'), (err) => {
+
+                expect(err).to.not.exist();
+
+                server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
+
+                const fn = () => {
+
+                    server.route({
+                        method: 'POST',
+                        path: '/',
+                        handler: (request, reply) => {
+
+                            return reply('ok');
+                        },
+                        config: {
+                            auth: {
+                                mode: 'required',
+                                payload: 'required'
+                            }
+                        }
+                    });
+                };
+
+                expect(fn).to.throw('Payload validation can only be required when all strategies support it in /');
+                return resolve();
             });
         });
     });
 
-    it('cannot add a route that has payload validation required', (done) => {
+    it('cannot add a route that has payload validation optional', () => {
 
         const validFunc = (token, callback) => {
 
@@ -544,36 +624,39 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            const fn = () => {
+                server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
 
-                server.route({
-                    method: 'POST',
-                    path: '/',
-                    handler: (request, reply) => {
+                const fn = () => {
 
-                        return reply('ok');
-                    },
-                    config: {
-                        auth: {
-                            mode: 'required',
-                            payload: 'required'
+                    server.route({
+                        method: 'POST',
+                        path: '/',
+                        handler: (request, reply) => {
+
+                            return reply('ok');
+                        },
+                        config: {
+                            auth: {
+                                mode: 'required',
+                                payload: 'optional'
+                            }
                         }
-                    }
-                });
-            };
+                    });
+                };
 
-            expect(fn).to.throw('Payload validation can only be required when all strategies support it in /');
-            done();
+                expect(fn).to.throw('Payload authentication requires at least one strategy with payload support in /');
+                return resolve();
+            });
         });
     });
 
-    it('cannot add a route that has payload validation optional', (done) => {
+    it('can add a route that has payload validation as none', () => {
 
         const validFunc = (token, callback) => {
 
@@ -585,73 +668,35 @@ lab.experiment('hapi-auth-bearer-simple', () => {
         const server = new Hapi.Server();
         server.connection();
 
-        server.register(require('../lib/'), (err) => {
+        return new Promise((resolve) => {
 
-            expect(err).to.not.exist();
+            server.register(require('../lib/'), (err) => {
 
-            server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
+                expect(err).to.not.exist();
 
-            const fn = () => {
+                server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
 
-                server.route({
-                    method: 'POST',
-                    path: '/',
-                    handler: (request, reply) => {
+                const fn = () => {
 
-                        return reply('ok');
-                    },
-                    config: {
-                        auth: {
-                            mode: 'required',
-                            payload: 'optional'
+                    server.route({
+                        method: 'POST',
+                        path: '/',
+                        handler: (request, reply) => {
+
+                            return reply('ok');
+                        },
+                        config: {
+                            auth: {
+                                mode: 'required',
+                                payload: false
+                            }
                         }
-                    }
-                });
-            };
+                    });
+                };
 
-            expect(fn).to.throw('Payload authentication requires at least one strategy with payload support in /');
-            done();
-        });
-    });
-
-    it('can add a route that has payload validation as none', (done) => {
-
-        const validFunc = (token, callback) => {
-
-            expect(token).to.exist();
-
-            return callback(null, token === internals.token, internals.validUser);
-        };
-
-        const server = new Hapi.Server();
-        server.connection();
-
-        server.register(require('../lib/'), (err) => {
-
-            expect(err).to.not.exist();
-
-            server.auth.strategy('default', 'bearerAuth', 'required', { validateFunction: validFunc });
-
-            const fn = () => {
-
-                server.route({
-                    method: 'POST',
-                    path: '/',
-                    handler: (request, reply) => {
-
-                        return reply('ok');
-                    },
-                    config: {
-                        auth: {
-                            mode: 'required',
-                            payload: false
-                        }
-                    }
-                });
-            };
-
-            expect(fn).to.not.throw();
-            done();
+                expect(fn).to.not.throw();
+                return resolve();
+            });
         });
     });
 });
