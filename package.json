@@ -32,7 +32,7 @@
     "hapi": ">=16.1.1 <17"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "scripts": {
     "test": "lab -a code -vL -t 100"
